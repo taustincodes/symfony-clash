@@ -1,0 +1,274 @@
+{% extends 'base.html.twig' %}
+{% block header %}
+    {{ include('navbar.html.twig') }}
+{% endblock %}
+{% block body %}
+<div class="container">
+		<div class="main-body">
+			<div class="row">
+				<div class="col-lg-4 col-md-6">
+					<div class="card">
+                        <div class="card-title">
+                            Player profile
+                        </div>
+						<div class="card-body text-center" style="height:145px;">
+                            <h4>{{ player.name }}</h4>
+                            <h6>Level {{ player.expLevel }}</h6>
+                            <h6 class="text-muted"><i class="fas fa-trophy"></i> {{ player.trophies }} | {{player.bestTrophies }} <i class="fas fa-trophy"></i></h6>
+                            
+
+						</div>
+					</div>
+                 	<div class="card">
+                     <div class="card-title">
+                            Crowns per win
+                        </div>
+						<div class="card-body" style="position:relative;">
+                            <canvas id="myChart"></canvas>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8">
+                    <div class="card" style="position:relative;">
+                    <div class="card-title">
+                            Trophy progression
+                        </div>
+                        <div class="card-body">
+
+                            <canvas id="myChart2"></canvas>
+ 
+                        </div>
+                    </div>
+                    <div class="card">
+                    <div class="card-title">
+                            Current deck
+                        </div>
+                        <div class="card-body">
+
+                            <div class="text-center" >
+                                {% for card in player.currentDeck %}
+                                        <img src="{{ card.iconUrls.medium }}" style="width:11%; ">
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+				</div>
+			</div>
+            <div class="row">
+                <div class="col-lg-8">
+                	<div class="card">
+                        <div class="card-title">
+                                Account progression
+                        </div>
+                        <div class="card-body">
+                        	{% for level, value in accountProgress %}
+                            <p>Level {{ level }}</p>
+						    <div class="progress mb-3" style="height: 5px">
+						        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ value }}%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+                                <button type="button" class="btn btn-primary" style="width:100%;"data-toggle="button-tooltip" data-placement="right" title="{{ value | round }}%">
+                                </button>
+                                </div>
+                            </div>
+                            {% endfor %}
+</div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                	<div class="card">
+                         <div class="card-title">
+                                Most losses against
+                        </div>
+                        {% for card in mostLostCards %}
+                        <div class="row text-center mb-2">
+                            <div class="col-lg-4 4 col-sm-4 col-xs-4 col-4 d-flex align-items-center justify-content-center">
+                                <img src="{{ card.details.iconUrls.medium }}" style="width:75%;">
+                            </div>
+                            <div class="col-lg-4 col-sm-4 col-xs-4 col-4 d-flex align-items-center justify-content-center">
+                                <h6>{{ card.name }}</h6>
+                            </div>
+                            <div class="col-lg-4 4 col-sm-4 col-xs-4 col-4 d-flex align-items-center justify-content-center">
+                                <h2>{{ card.value }}</h2>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
+
+
+                
+
+					</div>
+                </div>
+                
+            </div>
+		</div>
+	</div>
+
+
+
+  
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    {# <div id="mostLostCards">
+
+
+</div>
+
+
+
+
+
+
+    </div> #}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+    $(function () {
+  $('[data-toggle="button-tooltip"]').tooltip()
+})
+
+    {# pie chart #}
+    
+
+    const data = {
+  labels: [
+    '3 Crowns',
+    '2 Crowns',
+    '1 Crown'
+  ],
+  datasets: [{
+    data: [{{ crownLog }}],
+    backgroundColor: [
+      'rgb(2, 117, 216)',
+      'rgb(0,0,139)',
+      'rgba(2, 117, 216, 0.2)'
+    ],
+    hoverOffset: 4
+  }]
+};
+const config = {
+        type: 'doughnut',
+        data: data,
+        options: {
+                animation:{
+        animateRotate: true,
+        render: false,
+        duration: 2000,
+    },
+            plugins: {
+            legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                    boxWidth:10
+                }
+            },
+        }
+    },
+        responsive:true,
+        maintainAspectRatio: false,
+    };
+
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+
+
+    {# line chart #}
+
+
+
+
+
+    var xValues = [{{ graph.x }}];
+    var yValues = [{{ graph.y }}];
+
+    const ctx = document.getElementById('myChart2').getContext('2d');
+
+      const data2 = {
+        labels: xValues,
+        datasets: [{
+            label: 'Trophies',
+            data: yValues,
+               backgroundColor: [
+                'rgba(2, 117, 216, 0.2)'
+            ],
+            borderColor: [
+                'rgb(2, 117, 216)'
+            ],
+            fill: true,
+            
+  }]
+};
+
+const config2 = {
+        type: 'line',
+        data: data2,
+        options: {
+            scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Battle',
+          color: 'rgb(0,0,139)',
+        },
+        grid: {
+          display: false,
+        }
+      },
+       y: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Trophies',
+          color: 'rgb(0,0,139)',
+        },
+        grid: {
+          display: true,
+        }
+      }
+            },
+                
+            plugins: {
+                
+            legend: {
+                display: false,
+               
+            }
+        }
+    },
+        responsive:true,
+        maintainAspectRatio: false,
+    };
+
+    const myChart2 = new Chart(
+        ctx,
+        config2
+    );
+  
+
+
+
+
+    </script>
+
+
+
+{% endblock %}

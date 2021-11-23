@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Controller;
+
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\CardService;
+use App\Service\PlayerService;
+use App\Service\ClanService;
+use Symfony\Component\HttpFoundation\Response;
+
+class ClanController extends AbstractController
+{
+    public $cardService;
+    public $playerService;
+    public $clanService;
+
+    public function __construct(CardService $cardService, PlayerService $playerService, ClanService $clanService)
+    {
+        $this->cardService = $cardService;
+        $this->playerService = $playerService;
+        $this->clanService = $clanService;
+    }
+
+    /**
+     * @Route("/clans/{slug}", name="clans")
+     */
+    public function index(string $slug)
+    {
+        $clanTag = "%23" . $slug;
+
+        $clan = $this->clanService->getClan($clanTag);
+
+        var_dump($clan);
+        die();
+    }
+}

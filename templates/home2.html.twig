@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block header %}
+    {{ include('navbar.html.twig') }}
+{% endblock %}
+{% block body %}
+	<div class="container">
+		<div class="main-body">
+			<div class="row">
+				<div class="col-md-4 col-2"></div>
+				<div class="col-md-4 col-12 justify-content-center d-block m-auto">
+					<div class="card">
+						<div class="card-title">
+							<div style="display:block; text-align:center;">
+								<img src=" {{ asset('images/clash_royale_logo.png') }}" alt="Clash Royale logo" style="width:80%; padding-top:10vh; padding-bottom:10vh;" class="center">
+							</div>
+						</div>
+						<form class="form-inline justify-content-center pb-5 pt-5" action="player" method="get">
+							<div class="form-group mx-sm-3 mb-2">
+								<label for="playerId" class="sr-only">Player ID</label>
+								<input type="text" name="playerId" class="form" placeholder="Player Id">
+							</div>
+							<button type="submit" class="btn btn-primary mb-2">Go</button>
+						</form>
+					</div>
+				</div>
+				<div class="col-md-4 col-2">
+					<img src=" {{ asset('images/dart-goblin.png') }}" alt="Dart Goblin" style="position:fixed; bottom:0; right:5vw; width:20vw">
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
