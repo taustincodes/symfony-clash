@@ -1,7 +1,7 @@
-# index:
-#    path: /home
-#    controller: App\Controller\HomeController::index
+index:
+   path: /home
+   controller: App\Controller\HomeController::index
 
-# player:
-#   path: /player/{slug}
-#   controller: App\Controller\PlayerController::index
+player:
+  path: /player
+  controller: App\Controller\PlayerController::index
